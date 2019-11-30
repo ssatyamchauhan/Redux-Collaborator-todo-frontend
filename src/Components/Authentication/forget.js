@@ -25,10 +25,10 @@ export default class Recover extends Component{
     forget = (e) =>{
 
         
-        console.log('forget password is requested by user!', e.target.label)
+        // console.log('forget password is requested by user!', e.target.label)
             if(this.state.email){
                 axios
-                    .post('http://13.126.45.215:2000/forget',{email:this.state.email})
+                    .post('https://todobackend.learnreact.ml/forget',{email:this.state.email})
                     .then(data => {
                         if(data.data === 'not a user'){
                             swal("Check your email!", "You have a entered the wrong email address!","error")

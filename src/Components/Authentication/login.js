@@ -10,6 +10,7 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { GoogleLogin } from 'react-google-login';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import axios from 'axios';
@@ -19,86 +20,90 @@ import { Redirect, Link as Links } from 'react-router-dom';
 
 
 function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+    return (
+        <Typography variant="body2" color="textSecondary" align="center">
+            {'Copyright © '}
+            <Link color="inherit" href="https://material-ui.com/">
+                Your Website
       </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
+    );
 }
 
 export default class LoginPage extends Component {
-    
-        state = {
-             email: '',
-             password: '',
-             token: null,
-             isLoggedIn:false
-        }
+
+    state = {
+        email: '',
+        password: '',
+        token: null,
+        isLoggedIn: false
+    }
 
 
-    UNSAFE_componentWillMount(){
-        if(ls.get('credentials')){
+    UNSAFE_componentWillMount() {
+        if (ls.get('credentials')) {
             this.setState({
-                isLoggedIn:true
+                isLoggedIn: true
             })
         }
     }
 
-    changeHandler = (e) =>{
-            // console.log(e.target.id)
-                if(e.target.id==='email'){
-                    this.setState({
-                        email:e.target.value
-                    })
-                }
-                else{
-                    this.setState({
-                        password:e.target.value
-                    })
-                }
-            }
-    
+    changeHandler = (e) => {
+        // console.log(e.target.id)
+        if (e.target.id === 'email') {
+            this.setState({
+                email: e.target.value
+            })
+        }
+        else {
+            this.setState({
+                password: e.target.value
+            })
+        }
+    }
 
-    
+
+    responseGoogle = (response) => {
+        console.log(response.tokenObj);
+    }
+
+
     userLogin = (e) => {
 
         e.preventDefault();
 
-        axios.post('http://13.126.45.215:2000/login',
-             {
-                email:this.state.email,
-                password:this.state.password
+        axios.post('https://todobackend.learnreact.ml/login',
+            {
+                email: this.state.email,
+                password: this.state.password
             })
-            .then((data)=>{
+            .then((data) => {
+                console.log(data)
 
-                if(data.data.length>100){
-                    ls.set('credentials',data.data)
-                    console.log('this is backend data',data)
+                if (data.data.length > 100) {
+                    ls.set('credentials', data.data)
+                    // console.log('this is backend data',data)
                     this.setState({
-                        token:data.data,
-                        isLoggedIn:true
+                        token: data.data,
+                        isLoggedIn: true
                     })
                 }
-                else{
-                    console.log('this data does not exists')
-                    swal("This data does not exists!", "You have entered wrong credentials...!","error")
+                else {
+                    // console.log('this data does not exists')
+                    swal("This data does not exists!", "You have entered wrong credentials...!", "error")
                 }
-                
             })
 
-            .catch((err)=>{swal("This data does not exists!", "...and here's the text!")})
-            this.setState({
-                email:'',
-                password:''
-            })
+            .catch((err) => { swal("This data does not exists!", "...and here's the text!") })
+        this.setState({
+            email: '',
+            password: ''
+        })
     }
-    render(){
-        if(this.state.isLoggedIn){
+    render() {
+        if (this.state.isLoggedIn) {
             return <Redirect to="/projects" />
         }
         return (
@@ -118,7 +123,7 @@ export default class LoginPage extends Component {
                             required
                             fullWidth
                             id="email"
-                            value={this.state.email} 
+                            value={this.state.email}
                             onChange={this.changeHandler}
                             label="Email Address"
                             autoComplete="email"
@@ -131,16 +136,16 @@ export default class LoginPage extends Component {
                             variant="outlined"
                             margin="normal"
                             fullWidth
-                            value={this.state.password} 
+                            value={this.state.password}
                             onChange={this.changeHandler}
                             // name="password"
                             label="Password"
                             type="password"
                             id="password"
                             autoFocus
-                            // autoComplete="current-password"
+                        // autoComplete="current-password"
                         />
-                    
+
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}
                             label="Remember me"
@@ -164,6 +169,15 @@ export default class LoginPage extends Component {
                                     Don't have an account? Sign Up
                                 </Links>
                             </Grid>
+                        </Grid>
+                        <Grid>
+                            <GoogleLogin
+                                clientId="522773168327-3h09svvj857g1q030805d9bvrck4biv3.apps.googleusercontent.com"
+                                buttonText="Login"
+                                onSuccess={this.responseGoogle}
+                                onFailure={this.responseGoogle}
+                            // cookiePolicy={'single_host_origin'}
+                            />
                         </Grid>
                     </form>
                 </div>

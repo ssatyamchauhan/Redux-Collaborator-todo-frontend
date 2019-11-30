@@ -9,17 +9,15 @@ import axios from 'axios';
 
 function Inputtodo(props){
 
-  const [todo, setTodo] = React.useState(null)
-  const [assignedto, setAssigned] = React.useState(null)
+  const [todo, setTodo] = React.useState('')
+  const [assignedto, setAssigned] = React.useState('')
 
 
-  console.log(todo,'and',assignedto)
 
   let addtodo = (e) => {
     if(e.key === 'Enter'){
           if(todo && assignedto){
-            console.log('add todo is working')
-            axios.post('http://13.126.45.215:2000/todo', {
+            axios.post('https://todobackend.learnreact.ml/todo', {
                   projectid:Number(props.cardid),
                   assignedto:assignedto, 
                   todo:todo,

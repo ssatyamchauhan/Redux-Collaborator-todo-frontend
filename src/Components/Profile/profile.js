@@ -1,68 +1,55 @@
 import React, { Component } from 'react';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import ls from 'local-storage';
-import axios from 'axios'
-import { Redirect } from 'react-router-dom'
-import { List, ListItem, ListItemText, Typography, Avatar } from '@material-ui/core';
+import Card from 'react-bootstrap/Card';
+import { Button, Avatar } from '@material-ui/core'
 import swal from 'sweetalert'
+import axios from 'axios';
+import ls from 'local-storage';
 
-export default class Profile extends Component {
 
-    constructor(){
-        super()
-        this.state={
-            data:{},
-        }
+
+class CardExample extends Component {
+
+  constructor() {
+    super()
+    this.state = {
+      data: {},
     }
+  }
 
 
-    componentDidMount(){
-        axios.get('http://13.126.45.215:2000/profile', {params:{token:ls.get('credentials')}})
-            .then(data => {
-                console.log('fetched data',data.data)
-                this.setState({
-                    data:data.data[0]
-                })
-                console.log('this.is the fetched data',this.state.data)
-            })
-            .catch(err => {
-                swal('You are troubling any issue, You need to checkout that...., error')
-                console.log(err)
-            })
-    }
+  componentDidMount() {
+    axios.get('https://todobackend.learnreact.ml/profile', { params: { token: ls.get('credentials') } })
+      .then(data => {
+        this.setState({
+          data: data.data[0]
+        })
+        console.log('this.is the fetched data', this.state.data)
+      })
+      .catch(err => {
+        swal('You are troubling any issue, You need to checkout that...., error')
+        console.log(err)
+      })
+  }
 
-    render(){
-
-        if(!ls.get('credentials')){
-            return <Redirect pushto="/login" />
-        }
-        return (
-            <Card style={{height:180, width:300, display:"flex", flexDirection:"column",justifyContent:"flex-end", alignSelf:"center"}}>
-                <List>
-                    <ListItem>
-                        <ListItemText>
-                            <Avatar 
-                                alt="Remy Sharp" 
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLow_IPNDld2elH-g6Sqgpy1KGCh3RAd_78dRXPPejqaJDAiuI"
-                            />
-                        </ListItemText>
-                        <ListItemText>
-                            {this.state.data.name}
-                        </ListItemText>
-                    </ListItem>
-                </List>
-                <CardContent>
-
-                    <Typography variant="h6" color="primaryText">
-                        Email
-                    </Typography>
-                    <Typography variant="body2">
-                        {this.state.data.email}
-                    </Typography>
-
-                </CardContent>
-            </Card>
-        )
-    }
+  render() {
+    const colStyle = { maxWidth: "22rem" };
+    return (
+      <Card style={{ width: '20rem', margin: '0 auto', float: 'none', marginBottom: '10px', marginTop: '200px' }}>
+        <div style={{ position: 'relative', left: 0, top: 0, }}>
+          <Card.Img variant="top" src="http://eskipaper.com/images/beautiful-blurred-wallpaper-2.jpg" />
+          <Avatar alt="Remy Sharp" src={this.state.data.imagelink || "https://p7.hiclipart.com/preview/980/304/8/computer-icons-user-profile-avatar.jpg"}
+            style={{ height: 80, width: 80, position: 'absolute', top: '140px', left: '125px' }} />
+        </div>
+        <Card.Body>
+    <Card.Title>{this.state.data.name}</Card.Title>
+          <Card.Text>
+            Love only grows by sharing. You can only have more for yourself by giving it away to others.
+      </Card.Text>
+    <Button variant="secondary">{this.state.data.email}</Button>
+        </Card.Body>
+      </Card>
+    )
+  }
 }
+
+export default CardExample;

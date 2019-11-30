@@ -1,6 +1,6 @@
 import React from 'react';
 // import './App.css';
-import Input from './inputtodo';
+import Todo from './inputtodo';
 import Listoftodo from './listoftodo'
 import Header from './header'
 import { Redirect } from 'react-router-dom';
@@ -17,7 +17,7 @@ class App extends React.Component {
       return(
         <React.Fragment>
           <Header />
-          <Input cardid={queryString.parse(this.props.location.search).cardid} />
+          <Todo cardid={queryString.parse(this.props.location.search).cardid} />
           <Listoftodo cardid={queryString.parse(this.props.location.search).cardid}/>
         </React.Fragment>
       ); 

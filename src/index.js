@@ -6,13 +6,18 @@ import * as serviceWorker from './serviceWorker';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk';
-import listoftodo from './reducers/listoftodo'
+import listoftodo from './reducers/listoftodo';
+import listofbucket from './reducers/listofbucket';
 import listofproject from './reducers/listofproject'
 import projectid from './reducers/projectid';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import 'bootstrap-css-only/css/bootstrap.min.css';
+import 'mdbreact/dist/css/mdb.css';
 
 const rootReducer = combineReducers({
     listoftodo:listoftodo,
     listofproject:listofproject,
+    listofbucket: listofbucket,
     projectid:projectid
 })
 

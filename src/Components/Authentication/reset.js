@@ -30,7 +30,6 @@ export default class Reset extends Component{
         const value=queryString.parse(this.props.location.search);
         const token=value.key;
         if(token !== undefined){
-            console.log('inside if')
             this.setState({reset:true})
         }
     }
@@ -39,7 +38,7 @@ export default class Reset extends Component{
         const value=queryString.parse(this.props.location.search);
         const token=value.key;
         if(this.state.password1 === this.state.password2){
-           axios.post('http://13.126.45.215:2000/reset',{token:'key='+token,password:this.state.password1})
+           axios.post('https://todobackend.learnreact.ml/reset',{token:'key='+token,password:this.state.password1})
             .then(data => {
                 // console.log(data.data)
                 if(data.data === 'token is expired'){
@@ -54,6 +53,7 @@ export default class Reset extends Component{
             .catch(err => console.log(err))
         }
         else{
+            swal("USER DOES NOT EXISTS", "This use had never been a user.","error")
             console.log('did not match')
         }
     }

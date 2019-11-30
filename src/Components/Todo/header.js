@@ -13,7 +13,10 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import Drawer from '@material-ui/core/Drawer';
 import Avatar from '@material-ui/core/Avatar';
 import { useSelector } from  'react-redux';
@@ -52,13 +55,13 @@ const useStyles = makeStyles(theme => ({
 export default function PrimarySearchAppBar() {
   const classes = useStyles();
   const [isopenprofile, setBoolean]  = React.useState(false)
+  const [isProject, setProject]  = React.useState(false)
   const [logout, setLogout] = React.useState(false)
   const [state, setState] = React.useState({
     left: false,
   });
 
   const listoftodo = useSelector((state) => state.listoftodo)
-  console.log('list of todo is here',listoftodo)
 
   const toggleDrawer = (side, open) => event => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -67,6 +70,11 @@ export default function PrimarySearchAppBar() {
 
     setState({ ...state, [side]: open });
   };
+
+  if(!ls.get('credentials')){
+    ls.clear();
+    return <Redirect push to ='/login' />
+  }
 
   var done = listoftodo.filter((i) => {
     return i.done === true || i.done === 1;
@@ -80,37 +88,31 @@ export default function PrimarySearchAppBar() {
       onKeyDown={toggleDrawer(side, false)}
     >
       <List>
-        {[ 'Profile', 'Logout'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ?<Avatar 
-                                    onClick={() => setBoolean(true)}
-                                    alt="Remy Sharp" 
-                                    src="https://cdn2.iconfinder.com/data/icons/basic-ui-set/98/User-512.png"
-                                    
-                                  ></Avatar> : 
-                                    <Avatar
-                                    onClick={() => setLogout(true)}
-                                    alt="Hey there"
-                                    src="https://cdn2.iconfinder.com/data/icons/picons-essentials/57/logout-512.png"
-                                    >
-                                    </Avatar> 
-                                  
-                                  }
-                                  </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        <ListItem onClick={() => setBoolean(true)} button key={'Profile'}>
+          <ListItemIcon> < SupervisedUserCircleIcon /> </ListItemIcon>
+          <ListItemText>Profile</ListItemText>
+        </ListItem>
+        <ListItem button key={'Project'} onClick={() => setProject(true)} >
+          <ListItemIcon> <LibraryBooksIcon /> </ListItemIcon>
+          <ListItemText>Project</ListItemText>
+        </ListItem>
+        <ListItem button key={'Logout'} onClick={() => setLogout(true)} >
+          <ListItemIcon> <ExitToAppIcon /> </ListItemIcon>
+          <ListItemText>Logout</ListItemText>
+        </ListItem>
       </List>
     </div>
   );
   
   let openprofile = () => {
-    console.log('openprofile function is called')
     setBoolean(true)
   }
 
   if(isopenprofile){
     return <Redirect push to="/profile" />
+  }
+  if(isProject){
+    return <Redirect push to='/projects' />
   }
   if(logout){
     ls.clear('credentials')
@@ -129,7 +131,7 @@ export default function PrimarySearchAppBar() {
             <MenuIcon onClick={toggleDrawer('left', true)} />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            React-Todo
+          Collaborative Todo
           </Typography>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
