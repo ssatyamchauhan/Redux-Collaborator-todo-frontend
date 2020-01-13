@@ -36,4 +36,4 @@ Open your browser type http://localhost:5000<br>
 Make sure your [Backend](https://github.com/ssatyamchauhan/Redux-Collaborator-todo-backend) server also run at the same time.<br>
 
 ### Demo
-[App Demo](http://reacttodo.ml)
+[App Demo](http://todo.learnreact.ml)
